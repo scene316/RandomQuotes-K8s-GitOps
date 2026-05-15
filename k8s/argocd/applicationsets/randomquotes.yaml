@@ -1,0 +1,27 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: randomquotes
+  namespace: argocd
+spec:
+  generators:
+    - list:
+        elements:
+          - name: dev
+            namespace: development
+            path: k8s/overlays/dev
+  template:
+    metadata:
+      name: 'randomquotes-{{name}}'
+    spec:
+      project: default
+      source:
+        repoURL: https://github.com/scene316/RandomQuotes-K8s-GitOps.git
+        targetRevision: main
+        path: '{{path}}'
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: '{{namespace}}'
+      syncPolicy:
+        syncOptions:
+          - CreateNamespace=true
