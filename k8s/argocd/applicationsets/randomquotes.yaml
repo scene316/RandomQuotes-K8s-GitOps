@@ -10,18 +10,25 @@ spec:
           - name: dev
             namespace: development
             path: k8s/overlays/dev
+            octopusEnvironment: development
           - name: test
             namespace: test
             path: k8s/overlays/test
+            octopusEnvironment: test
           - name: staging
             namespace: staging
             path: k8s/overlays/staging
+            octopusEnvironment: staging
           - name: prod
             namespace: production
             path: k8s/overlays/prod
+            octopusEnvironment: production
   template:
     metadata:
       name: 'randomquotes-{{name}}'
+      annotations:
+        argo.octopus.com/project: "random-quotes-gitops"
+        argo.octopus.com/environment: "{{octopusEnvironment}}"
     spec:
       project: default
       source:
